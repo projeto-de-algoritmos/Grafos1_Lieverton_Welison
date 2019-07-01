@@ -29,7 +29,7 @@ Para , execute os seguintes passos:
 	* Através do _git_, faça um _git clone_:
 
 ```
-    $ git clone https://github.com/EDAII/Lista5_WelisonRegis_LievertonSilva
+    $ git clone https://github.com/EDAII/Lista6_WelisonRegis_LievertonSilva
 ```
 
 2. Entre na pasta do projeto:
