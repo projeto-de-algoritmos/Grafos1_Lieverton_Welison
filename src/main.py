@@ -17,6 +17,7 @@ options = """
 | 1 |    exportar          |
 | 2 |    jogar             |
 | 3 |    resolver          |
+| 0 |    sair              |
 +---+----------------------+
 
 Digite o numero da opção desejada:
@@ -257,9 +258,11 @@ def solve_maze(x, y):
         time.sleep(velocity)
 
 velocity = 0.1
+running = True
+
 
 def pygame_monitor():
-    running = True
+    global running
     global velocity
 
     while running:
@@ -278,6 +281,7 @@ def pygame_monitor():
 
 
 def main():
+    global running
     x, y = 20, 20
     generate_grid(0, 0)
     make_maze(x, y)
@@ -292,6 +296,9 @@ def main():
             play_maze(x, y)    
         elif option == '3':
             solve_maze((GRID_WIDTH-1)*20, (GRID_HEIGHT-1)*20)
+        elif option == '0':
+            running = False
+            break
 
 if __name__ == '__main__':
     t1 = Thread(target = pygame_monitor)

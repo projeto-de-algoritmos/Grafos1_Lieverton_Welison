@@ -1,0 +1,5 @@
+# Ignore cache from python
+__pycache__
+
+# Ignora pasta com os labirintos em pdf e imagem
+mazes
