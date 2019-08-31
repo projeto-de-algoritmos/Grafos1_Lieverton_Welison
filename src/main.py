@@ -2,8 +2,25 @@ import constants
 import pygame
 import time
 import random
-from threading import Thread
 import os
+import img2pdf 
+from threading import Thread
+from PIL import Image 
+  
+
+options = """
+
++--------------------------+
+| opções:                  |
++---+----------------------+
+| 1 |    exportar          |
+| 2 |    jogar             |
+| 3 |    resolver          |
++---+----------------------+
+
+Digite o numero da opção desejada:
+
+"""
 
 print("""
  _        _    ____ ___ ____  ___ _   _ _____ ___          _   ___  
@@ -63,27 +80,27 @@ def solution_line(x, y, x1, y1):
     pygame.display.update()
 
 def expand_down(x, y):
-    pygame.draw.rect(screen, constants.GREY, (x + 1, y + 1, 19, 39), 0)
+    pygame.draw.rect(screen, constants.WHITE, (x + 1, y + 1, 19, 39), 0)
     pygame.display.update()
 
 
 def expand_up(x, y):
-    pygame.draw.rect(screen, constants.GREY, (x + 1, y - constants.CELL_WIDTH + 1, 19, 39), 0)
+    pygame.draw.rect(screen, constants.WHITE, (x + 1, y - constants.CELL_WIDTH + 1, 19, 39), 0)
     pygame.display.update()
 
 
 def expand_left(x, y):
-    pygame.draw.rect(screen, constants.GREY, (x - constants.CELL_WIDTH + 1, y + 1, 39, 19), 0)
+    pygame.draw.rect(screen, constants.WHITE, (x - constants.CELL_WIDTH + 1, y + 1, 39, 19), 0)
     pygame.display.update()
 
 
 def expand_right(x, y):
-    pygame.draw.rect(screen, constants.GREY, (x + 1, y + 1, 39, 19), 0)
+    pygame.draw.rect(screen, constants.WHITE, (x + 1, y + 1, 39, 19), 0)
     pygame.display.update()
 
 
 def backtracking_cell(x, y):
-    pygame.draw.rect(screen, constants.GREY, (x + 1, y + 1, 18, 18), 0)
+    pygame.draw.rect(screen, constants.WHITE, (x + 1, y + 1, 18, 18), 0)
     pygame.display.update()
 
 
@@ -154,6 +171,20 @@ def make_maze(x, y):
             backtracking_cell(x, y)
 
 
+def export_maze():
+    file_name = input("digite o nome do arquivo: ") 
+    pygame.image.save(screen, file_name + ".png")
+    img_path = file_name + ".png"
+    pdf_path = file_name + ".pdf"
+    image = Image.open(img_path) 
+    pdf_bytes = img2pdf.convert(image.filename) 
+    file = open(pdf_path, "wb")
+    file.write(pdf_bytes)
+    image.close()
+    file.close() 
+    print("Labirinto exportado com sucesso.") 
+
+
 def solve_maze(x, y):
     solution_cell(x, y)
     x1, y1 = GRID_WIDTH*20, GRID_HEIGHT*20
@@ -194,7 +225,15 @@ def main():
     make_maze(x, y)
     start_point(20, 20)
     end_point((GRID_WIDTH-1)*20, (GRID_HEIGHT-1)*20)
-    solve_maze((GRID_WIDTH-1)*20, (GRID_HEIGHT-1)*20)
+    
+    while True:
+        option = input(options)
+        elif option == '1':
+            export_maze()
+        # elif option == 2:
+            # play_maze()    
+        elif option == '3':
+            solve_maze((GRID_WIDTH-1)*20, (GRID_HEIGHT-1)*20)
 
 if __name__ == '__main__':
     t1 = Thread(target = pygame_monitor)
