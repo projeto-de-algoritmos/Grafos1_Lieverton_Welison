@@ -5,9 +5,10 @@ import random
 import os
 import img2pdf 
 from threading import Thread
-from PIL import Image 
-  
+from PIL import Image
+from collections import defaultdict
 
+  
 options = """
 
 +--------------------------+
@@ -56,6 +57,7 @@ grid = []
 visited = []
 stack = []
 solution = {}
+paths = defaultdict(list)
 
 
 def generate_grid(x, y):
@@ -126,16 +128,21 @@ def make_maze(x, y):
         time.sleep(velocity)
         cell = []
 
-        if (x, y + constants.CELL_WIDTH) not in visited and (x, y + constants.CELL_WIDTH) in grid:
+        right = x + constants.CELL_WIDTH
+        down = y + constants.CELL_WIDTH
+        up = y - constants.CELL_WIDTH
+        left = x - constants.CELL_WIDTH
+
+        if (x, down) not in visited and (x, down) in grid:
             cell.append("down")
 
-        if (x, y - constants.CELL_WIDTH) not in visited and (x, y - constants.CELL_WIDTH) in grid:
+        if (x, up) not in visited and (x, up) in grid:
             cell.append("up")
 
-        if (x + constants.CELL_WIDTH, y) not in visited and (x + constants.CELL_WIDTH, y) in grid:
+        if (right, y) not in visited and (right, y) in grid:
             cell.append("right")
 
-        if (x - constants.CELL_WIDTH, y) not in visited and (x - constants.CELL_WIDTH, y) in grid:
+        if (left, y) not in visited and (left, y) in grid:
             cell.append("left")
 
         if len(cell) > 0:
@@ -144,6 +151,9 @@ def make_maze(x, y):
             if cell_chosen == "right":
                 expand_right(x, y)
                 solution[(x + constants.CELL_WIDTH, y)] = x, y
+                paths[(x, y)].append([x+constants.CELL_WIDTH, y])
+                paths[(x+constants.CELL_WIDTH, y)].append([x, y])
+
                 x = x + constants.CELL_WIDTH
                 visited.append((x, y))
                 stack.append((x, y))
@@ -151,6 +161,9 @@ def make_maze(x, y):
             elif cell_chosen == "left":
                 expand_left(x, y)
                 solution[(x - constants.CELL_WIDTH, y)] = x, y
+                paths[(x, y)].append([x - constants.CELL_WIDTH, y])
+                paths[(x - constants.CELL_WIDTH, y)].append([x, y])
+
                 x = x - constants.CELL_WIDTH
                 visited.append((x, y))
                 stack.append((x, y))
@@ -158,6 +171,9 @@ def make_maze(x, y):
             elif cell_chosen == "down":
                 expand_down(x, y)
                 solution[(x, y + constants.CELL_WIDTH)] = x, y
+                paths[(x, y)].append([x, y + constants.CELL_WIDTH])
+                paths[(x, y + constants.CELL_WIDTH)].append([x, y])
+
                 y = y + constants.CELL_WIDTH
                 visited.append((x, y))
                 stack.append((x, y))
@@ -165,6 +181,9 @@ def make_maze(x, y):
             elif cell_chosen == "up":
                 expand_up(x, y)
                 solution[(x, y - constants.CELL_WIDTH)] = x, y
+                paths[(x, y)].append([x, y - constants.CELL_WIDTH])
+                paths[(x, y - constants.CELL_WIDTH)].append([x, y])
+
                 y = y - constants.CELL_WIDTH
                 visited.append((x, y))
                 stack.append((x, y))
@@ -181,19 +200,19 @@ def play_maze(x, y):
     while True:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
+                if event.key == pygame.K_LEFT and [x-constants.CELL_WIDTH, y] in paths[(x, y)]:
                     single_cell2(x,y)
                     x = x - constants.CELL_WIDTH
                     single_cell(x,y)
-                if event.key == pygame.K_RIGHT:
+                if event.key == pygame.K_RIGHT and [x + constants.CELL_WIDTH, y] in paths[(x, y)]:
                     single_cell2(x,y)
                     x = x + constants.CELL_WIDTH
                     single_cell(x,y)
-                if event.key == pygame.K_UP:
+                if event.key == pygame.K_UP and [x, y - constants.CELL_WIDTH] in paths[(x, y)]:
                     single_cell2(x,y)
-                    y = y - constants.CELL_WIDTH 
+                    y = y - constants.CELL_WIDTH
                     single_cell(x,y)
-                if event.key == pygame.K_DOWN:
+                if event.key == pygame.K_DOWN and [x, y + constants.CELL_WIDTH] in paths[(x, y)]:
                     single_cell2(x,y)
                     y = y + constants.CELL_WIDTH
                     single_cell(x,y)
