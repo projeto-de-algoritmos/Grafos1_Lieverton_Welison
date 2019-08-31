@@ -108,6 +108,10 @@ def single_cell(x, y):
     pygame.draw.rect(screen, constants.BLUE, (x + 1, y + 1, 18, 18), 0)
     pygame.display.update()
 
+def single_cell2(x, y):
+    pygame.draw.rect(screen, constants.WHITE, (x + 1, y + 1, 18, 18), 0)
+    pygame.display.update()
+
 
 def solution_cell(x, y):
     pygame.draw.rect(screen, constants.BLUE, (x+8, y+8, 5, 5), 0)
@@ -170,6 +174,30 @@ def make_maze(x, y):
             time.sleep(velocity)
             backtracking_cell(x, y)
 
+def play_maze(x, y):
+
+    single_cell(x,y)
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    single_cell2(x,y)
+                    x = x - constants.CELL_WIDTH
+                    single_cell(x,y)
+                if event.key == pygame.K_RIGHT:
+                    single_cell2(x,y)
+                    x = x + constants.CELL_WIDTH
+                    single_cell(x,y)
+                if event.key == pygame.K_UP:
+                    single_cell2(x,y)
+                    y = y - constants.CELL_WIDTH 
+                    single_cell(x,y)
+                if event.key == pygame.K_DOWN:
+                    single_cell2(x,y)
+                    y = y + constants.CELL_WIDTH
+                    single_cell(x,y)
+
 
 def export_maze():
     file_name = input("digite o nome do arquivo: ") 
@@ -228,10 +256,10 @@ def main():
     
     while True:
         option = input(options)
-        elif option == '1':
+        if option == '1':
             export_maze()
-        # elif option == 2:
-            # play_maze()    
+        elif option == '2':
+            play_maze(x, y)    
         elif option == '3':
             solve_maze((GRID_WIDTH-1)*20, (GRID_HEIGHT-1)*20)
 
