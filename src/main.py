@@ -198,6 +198,10 @@ def play_maze(x, y):
     single_cell(x,y)
 
     while True:
+        if x == (GRID_WIDTH-1)*20 and y == (GRID_HEIGHT-1)*20:
+            solve_maze(x, y)
+            start_point(20, 20)
+            break
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT and [x-constants.CELL_WIDTH, y] in paths[(x, y)]:
@@ -219,10 +223,17 @@ def play_maze(x, y):
 
 
 def export_maze():
-    file_name = input("digite o nome do arquivo: ") 
-    pygame.image.save(screen, file_name + ".png")
-    img_path = file_name + ".png"
-    pdf_path = file_name + ".pdf"
+    file_name = input("digite o nome do arquivo: ")
+
+    os.chdir('..')
+    actual_path = os.getcwd() + '/mazes/'
+    if not os.path.exists(actual_path):
+        os.makedirs(actual_path)
+    
+    pygame.image.save(screen, actual_path + file_name + ".png")
+
+    img_path = actual_path + file_name + ".png"
+    pdf_path = actual_path + file_name + ".pdf"
     image = Image.open(img_path) 
     pdf_bytes = img2pdf.convert(image.filename) 
     file = open(pdf_path, "wb")
