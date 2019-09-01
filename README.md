@@ -1,23 +1,24 @@
 **Lista 1 - Aplicação de grafos na geração de labirintos em PDF** 
 =========================
-Welison Lucas Almeida Regis - 2019.1
+Welison Lucas Almeida Regis - 2019.2
 
-Lieverton Santos Silva - 2019.1
+Lieverton Santos Silva - 2019.2
 
 ## PROPOSTA
 
 - Utilizou-se o algoritmo de **Depth-Fist-Search (DFS)** para gerar um labirinto aleatório.
 - Apresenta-se graficamente o labirinto e sua solução, além dos backtracks realizados pelo algoritmo, tudo com a bibliteca de jogos **pygame**.
-- Ao gerar o labirinto o usuário tem a opção de jogar, mostrar, ou resolução e expotar o labirinto como **PNG**/ **PDF**.   
+- Após gerar o labirinto, o usuário tem a opção de **jogar, mostrar a solução e expotar o labirinto** como **PNG**/ **PDF**.
 
 * O algoritmo desenvolvido baseia-se no pseudocódigo de geração de labirintos disponível na [Wikipedia](https://www.wikiwand.com/en/Maze_generation_algorithm).
 
-![Imgur](https://i.imgur.com/Ua6p9LO.png)
+<p align=center>
+  <img src="https://media.giphy.com/media/cLk0P9ymVidNwcx0Ve/giphy.gif" alt="brainly logo"/>
+</p>
 
 ## PRÉ-REQUISITOS
 
 Para testar a aplicação, execute os seguintes passos:
-
 1. Faça uma cópia do repositório para o seu computador em um lugar de sua preferência.
 	* Através do _git_, faça um _git clone_:
 
@@ -38,24 +39,10 @@ Para testar a aplicação, execute os seguintes passos:
 - Caso tenha problemas com o comando acima, instale manualmente com o `pip` os pacotes: `pygame`, `Pillow` e `img2pdf `.
 - Versão python utilizado: `Python v3.7`.
 
-## ACESSE O PROJETO
-
-Para , execute os seguintes passos:
-1. Faça uma cópia do repositório para o seu computador em um lugar de sua preferência.
-	* Através do _git_, faça um _git clone_:
-
-```
-    $ git clone https://github.com/projeto-de-algoritmos/Lista1_Lieverton_Welison
-```
-
-2. Entre na pasta do projeto:
-```
-    $ cd Lista1_Lieverton_Welison/src
-```
-
 ## EXECUÇÃO
 
-- Na pasta `Lista1_Lieverton_Welison/src` do projeto:
+Para executar, a partir de `Lista1_Lieverton_Welison`, proceda:
+  - `$ cd src`
   - `$ python3 main.py`
 
 ## INSTRUÇÕES
