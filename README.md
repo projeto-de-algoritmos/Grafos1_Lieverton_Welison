@@ -64,6 +64,7 @@ Para , execute os seguintes passos:
 - Aperte ↑ (seta para cima) para aumentar a velocidade da animação.
 - Aperte ↓ (seta para baixo) para diminuir a velocidade da animação.
 - Após gerar o labirinto digite o número da opção desejada:
+
     | |opções:      |
     | :---: | :---: |
     | 1 | exportar  |
