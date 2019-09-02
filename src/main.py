@@ -108,11 +108,15 @@ def backtracking_cell(x, y):
 
 
 def single_cell(x, y):
-    pygame.draw.rect(screen, constants.BLUE, (x + 1, y + 1, 18, 18), 0)
+    pygame.draw.rect(screen, constants.BLUE, (x + 3, y + 3, 14, 14), 0)
     pygame.display.update()
 
 def single_cell2(x, y):
     pygame.draw.rect(screen, constants.WHITE, (x + 1, y + 1, 18, 18), 0)
+    pygame.display.update()
+
+def single_cell3(x, y):
+    pygame.draw.rect(screen, constants.BLACK, (x, y, 20, 20), 0)
     pygame.display.update()
 
 
@@ -195,7 +199,7 @@ def make_maze(x, y):
             backtracking_cell(x, y)
 
 def play_maze(x, y):
-
+    bfs_go = True
     single_cell(x,y)
 
     while True:
@@ -205,23 +209,46 @@ def play_maze(x, y):
             break
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
+                if (bfs_go):
+                    bfs_go = False
+                    t3.start()
+
                 if event.key == pygame.K_LEFT and [x-constants.CELL_WIDTH, y] in paths[(x, y)]:
-                    single_cell2(x,y)
                     x = x - constants.CELL_WIDTH
+                    expand_right(x, y)
                     single_cell(x,y)
                 if event.key == pygame.K_RIGHT and [x + constants.CELL_WIDTH, y] in paths[(x, y)]:
-                    single_cell2(x,y)
                     x = x + constants.CELL_WIDTH
+                    expand_left(x, y)
                     single_cell(x,y)
                 if event.key == pygame.K_UP and [x, y - constants.CELL_WIDTH] in paths[(x, y)]:
-                    single_cell2(x,y)
                     y = y - constants.CELL_WIDTH
+                    expand_down(x, y)
                     single_cell(x,y)
                 if event.key == pygame.K_DOWN and [x, y + constants.CELL_WIDTH] in paths[(x, y)]:
-                    single_cell2(x,y)
                     y = y + constants.CELL_WIDTH
+                    expand_up(x, y)
                     single_cell(x,y)
 
+
+def play_bfs():
+    x, y = [20, 20]
+    time.sleep(3)
+    queue = []
+    bfs_visited = []
+
+    queue.append([x, y])
+    bfs_visited.append([x, y])
+
+    while (queue):
+        s = queue.pop(0)
+
+        for graph in paths[tuple(s)]:
+            if graph not in bfs_visited:
+                queue.append(graph)
+                bfs_visited.append(graph)
+                time.sleep(0.15)
+                single_cell3(graph[0], graph[1])
 
 def export_maze():
     file_name = input("digite o nome do arquivo: ")
@@ -293,7 +320,7 @@ def main():
         if option == '1':
             export_maze()
         elif option == '2':
-            play_maze(x, y)    
+            play_maze(x, y)
         elif option == '3':
             solve_maze((GRID_WIDTH-1)*20, (GRID_HEIGHT-1)*20)
         elif option == '0':
@@ -303,9 +330,11 @@ def main():
 if __name__ == '__main__':
     t1 = Thread(target = pygame_monitor)
     t2 = Thread(target = main)
+    t3 = Thread(target = play_bfs)
 
     t1.start()
     t2.start()
 
     t1.join()
     t2.join()
+    t3.join()
