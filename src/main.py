@@ -34,11 +34,11 @@ print("""
 """)
 
 while True:
-    GRID_WIDTH = int(input('Digite a largura do labirinto (1-50): '))
-    GRID_HEIGHT = int(input('Digite a altura do labirinto (1-30): '))
+    GRID_WIDTH = int(input('Digite a largura do labirinto (20-50): '))
+    GRID_HEIGHT = int(input('Digite a altura do labirinto (20-30): '))
     print('\n')
 
-    if GRID_WIDTH >= 1 and GRID_WIDTH <= 50 and GRID_HEIGHT >= 1 and GRID_HEIGHT <= 30:
+    if GRID_WIDTH >= 20 and GRID_WIDTH <= 50 and GRID_HEIGHT >= 20 and GRID_HEIGHT <= 30:
         break
 
 os.system('cls' if os.name == 'nt' else 'clear')
@@ -60,6 +60,7 @@ stack = []
 solution = {}
 paths = defaultdict(list)
 
+play = True
 
 def generate_grid(x, y):
     for i in range(1, GRID_HEIGHT):
@@ -199,14 +200,23 @@ def make_maze(x, y):
             backtracking_cell(x, y)
 
 def play_maze(x, y):
+    global play
     bfs_go = True
     single_cell(x,y)
 
-    while True:
+    while play:
         if x == (GRID_WIDTH-1)*20 and y == (GRID_HEIGHT-1)*20:
+            play = False
             solve_maze(x, y)
             start_point(20, 20)
+            gameOverMessage = pygame.image.load(os.path.join("../img", "win.png"))
+            messageRect = gameOverMessage.get_rect()
+            messageHalfSize = [messageRect[2]//2, messageRect[3]//2]
+            position = [(GRID_WIDTH+1)*10 - messageHalfSize[0], (GRID_HEIGHT+1)*10 - messageHalfSize[1]]
+            screen.blit(gameOverMessage, position)
+            pygame.display.flip()
             break
+
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if (bfs_go):
@@ -230,8 +240,11 @@ def play_maze(x, y):
                     expand_up(x, y)
                     single_cell(x,y)
 
+                    
+
 
 def play_bfs():
+    global play
     x, y = [20, 20]
     time.sleep(3)
     queue = []
@@ -244,11 +257,23 @@ def play_bfs():
         s = queue.pop(0)
 
         for graph in paths[tuple(s)]:
-            if graph not in bfs_visited:
+            if graph not in bfs_visited and play:
                 queue.append(graph)
                 bfs_visited.append(graph)
                 time.sleep(0.15)
                 single_cell3(graph[0], graph[1])
+                if graph[0] == (GRID_WIDTH-1)*20 and graph[1] == (GRID_HEIGHT-1)*20:
+                    play = False
+                    solve_maze(graph[0], graph[1])
+                    start_point(20, 20)
+                    gameOverMessage = pygame.image.load(os.path.join("../img", "lose.png"))
+                    messageRect = gameOverMessage.get_rect()
+                    messageHalfSize = [messageRect[2]//2, messageRect[3]//2]
+                    position = [(GRID_WIDTH+1)*10 - messageHalfSize[0], (GRID_HEIGHT+1)*10 - messageHalfSize[1]]
+                    screen.blit(gameOverMessage, position)
+                    pygame.display.flip()
+                    return
+                    
 
 def export_maze():
     file_name = input("digite o nome do arquivo: ")
@@ -328,6 +353,8 @@ def main():
             break
 
 if __name__ == '__main__':
+
+
     t1 = Thread(target = pygame_monitor)
     t2 = Thread(target = main)
     t3 = Thread(target = play_bfs)
